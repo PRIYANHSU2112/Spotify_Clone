@@ -16,9 +16,10 @@ const mongoose=require('mongoose');
 const { promises } = require('dns');
 const playModel = require('../models/playModel');
 const userModel = require('../models/userModel');
+require('dotenv').config();
 
 
-mongoose.connect('mongodb://127.0.0.1:27017/Gana').then(()=>{
+mongoose.connect(process.env.MONGODB_URI).then(()=>{
   console.log("connect Data")
 }).catch((err)=>{
   console.log(err);
