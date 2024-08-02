@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotify</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link rel="stylesheet" href="/stylesheets/spotify.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <script src="https://cdn.lordicon.com/lordicon-1.1.0.js"></script>
+  </head>
+  <body>
+
+    <aside class="sidenav">
+      <div class="logo">
+        <a href="#"><img class="pb-50" src="../images/logorgb.png" alt=""></a>
+      </div>
+      <div class="menulink">
+        <a href="#"><i class="fas fa-home"></i><span>Home</span></a>
+        <a href="/search"><i class="fas fa-search"></i> <span>Search</span> </a>
+        <a href="/library"><i class="ri-heart-3-line"></i><span>library</span> </a>
+        <a onclick="displayform()" class="plist" style="position: relative">
+          <div id="boxlist" class="boxlist">
+            <i class="ri-play-list-line"></i>
+            <p>Create Playlist</p>
+          </div>
+          <div style="display: none" class="pform">
+            <form action="/createPlaylist" method="post">
+              <label id="label" for="name"><h1>Playlist Name:</h1> <i onclick="labelblock()" class="ri-close-line"></i></label>
+              <input type="text" name="name" id="name" required placeholder="playlistname" />
+              <button id="but-ply" type="submit">
+                <div id="boxx">
+                  <h2>Create Playlist</h2>
+                </div>
+              </button>
+            </form>
+          </div>
+        </a>        
+        <% currentuser.playList.forEach(list=>{ %>
+          <div class="all-flex">
+            <a
+              id="plname1"
+              style="text-decoration: none"
+              href="/openplaylist/<%=list._id%>"
+            >
+              <h3 id="plname">🎧 <%=list.name%></h3>
+            </a>
+  
+           <div class="ad">
+            <a href="/addsong/<%=list._id%>">
+              <lord-icon
+                class="addicon"
+                src="https://cdn.lordicon.com/zrkkrrpl.json"
+                trigger="hover"
+                colors="primary:#109173,secondary:#08a88a"
+                style="width: 30px; height: 30px"
+              >
+              </lord-icon>
+            </a>
+            <a href="/deleteplaylist/<%= list._id %>">
+              <lord-icon
+                src="https://cdn.lordicon.com/skkahier.json"
+                trigger="hover"
+                colors="primary:#00D856"
+                style="width: 30px; height: 30px"
+              >
+              </lord-icon>
+            </a>
+           </div>
+          </div>
+  
+          <% }) %>
+        </div>
+
+
+      </div>
+      <div class="buttons">
+        <a href="#"><button type="button" class="btn btn-light">Explore Premium</button></a>
+        <a href="#"><button type="button" class="btn btn-dark">Install App</button></a>
+      </div>
+      <div class="cookie col-md-12 text-center">
+        <a href="#">Politica sui cookie</a>
+        <a href="#">Terms and conditions</a>
+        <a href="#">Privacy</a>    
+        </div>
+      </div>
+    </aside>
+
+    <main>
+      <div class="container-flex ptb-30 plb-20">
+        <div class=" toplist">
+          <ul class="list-inline">
+            <li><a href="#">in evidenza </a></li>
+            <li><a target="_blank" href="https://podcasts.google.com/">podcast</a></li>
+            <li><a href="#">generi e mood</a></li>
+            <li><a href="#">nuove uscite</a></li>
+            <li><a href="#">scopri</a></li>
+          </ul>
+          <div class="user"><i class="ri-user-line"></i><h1><%=currentuser.username%></h1></div>
+        </div>
+      </div>
+        <div class="title plb-20">
+          <h1><strong>Recommended for <span><%=currentuser.username%></span></strong></h1>
+        </div>
+      </div>
+        <div class=" container-flex text-center">
+          <% currentuser.playList[0].songs.forEach(song =>{  %>
+          <div class="music-card" onclick="posterClick('<%=song.poster %>'),songClick('<%=song.filename%>'),artistClick('<%=song.artist%>'),titleClick('<%=song.title%>'),like('<%=song._id%>')">
+            <img src="/poster/<%= song.poster %>" alt=""  >
+            <div class="playbutton"  ><i class="ri-play-fill"></i></div>
+            <h4><%=song.title%></h4>
+            <h5><%=song.artist%></h5> 
+          </div>
+          <%})%>
+        </div>
+        <div class="title plb-20">
+          <h1><strong>Concentrati con le nostre Playlist...</strong></h1>
+        </div>
+        <div class=" container-flex text-center">
+          <% if (currentuser.playList.length > 1 && currentuser.playList[1].songs.length > 0) { %>
+          <% currentuser.playList[1].songs.forEach(song =>{  %>
+          <div class="music-card" onclick="posterClick('<%=song.poster %>'),songClick('<%=song.filename%>'),artistClick('<%=song.artist%>'),titleClick('<%=song.title%>'),like('<%=song._id%>')">
+            <img src="/poster/<%= song.poster %>" alt=""  >
+            <div class="playbutton"  ><i class="ri-play-fill"></i></div>
+            <h4><%=song.title%></h4>
+            <h5><%=song.artist%></h5> 
+          </div>
+          <%})%>
+          <% } else { %>
+            <p>No songs found in the playlist or playlist not available.</p>
+          <% } %>
+        </div>
+
+        <div class="container-flex">
+          <div class="title plb-20">
+            <h1><strong>Classifiche</strong></h1>
+          </div>
+        </div>
+        <div class="container-flex text-center">
+          <div class="music-card">
+            <a href="#"><img src="top50.jpg" alt=""></a>
+            <p>Top 50 - Italia</p>
+          </div>
+          <div class="music-card">
+            <a href="#"><img src="top50.jpg" alt=""></a>
+            <p>Top 50 - Italia</p>
+          </div>
+          <div class="music-card">
+            <a href="#"><img src="top50.jpg" alt=""></a>
+            <p>Top 50 - Italia</p>
+          </div>
+          <div class="music-card">
+            <a href="#"><img src="top50.jpg" alt=""></a>
+            <p>Top 50 - Italia</p>
+          </div>
+        </div>
+    </main>
+    <footer>
+      <div class="playmusic text-center">
+        <div class="playcontent"><img src="/poster/f67455c7980454dc92f352a7fc1049786cc63a6eposter" alt="">
+         <div class="playtext">
+          <h4>Jaan Da (Rab Ki Dua) - </h4>
+          <h5>Shreya Ghoshal, Shashwat Sachdev</h5>
+         </div>
+          <div class="like"><a href="/library/654c5d554de21b3b678fbb8f /653e47ce4b32a5594213de42"><i class="ri-heart-3-line"></i></a></div>
+        </div>
+        <audio id="song" src="/stream/f67455c7980454dc92f352a7fc1049786cc63a6e" controls></audio>
+        <div class="audio">
+          <div class="play"><i class="ri-shuffle-fill"></i><i class="ri-skip-left-fill"></i><i id="plays" class="ri-play-circle-fill" onclick="playpuse()"  ></i><i class="ri-skip-right-fill"></i><i class="ri-repeat-2-line"></i></div>
+         <div class="slide"> <input  id="progress" type="range" value="0"></div>
+        </div>
+      </div>
+    </footer>
+    <script>
+      function songClick(filename){
+        document.querySelector('audio').setAttribute('src',`/stream/${filename}`)
+        document.querySelector('audio').play()
+        console.log(filename)
+        document.getElementById("plays").classList.remove("ri-play-circle-fill");
+        document.getElementById("plays").classList.add("ri-pause-circle-fill");
+        // document.querySelector('.playtext>h4').innerHTML=song;
+        
+      }
+     function posterClick(poster){
+      document.querySelector('.playcontent>img').setAttribute('src',`/poster/${poster}`)
+      console.log(poster)
+     }
+    function artistClick(artist){
+      document.querySelector('.playtext>h5').innerHTML=artist;
+      console.log(artist)
+    }
+    function titleClick(title){
+      document.querySelector('.playtext>h4').innerHTML=title;
+      console.log(title)
+    }
+    function displayform() {
+        document.querySelector(".boxlist").style.display = "none";
+        document.querySelector(".pform").style.display = "block";
+        // document.querySelector(".ri-close-line").style.display = "block";
+        console.log("show me");
+      }
+      function labelblock(){
+        document.querySelector(".pform").style.display = 'none';
+        document.querySelector(".boxlist").style.display = "block ";
+        console.log("done")
+      }
+      function like(songid){
+      
+      }
+
+  // ====== playcontorls
+
+    var progress=document.querySelector('#progress');
+    var song=document.querySelector("#song");
+    var play=document.querySelector("#plays");
+
+    // if(song.play()){
+    //   play.classList.add("ri-pause-circle-fill")
+    // }
+
+    song.onloadedmetadata = function(){
+        progress.max=song.duration;
+        progress.value=song.currentTime;
+    }
+ 
+    function playpuse(){
+        if(play.classList.contains("ri-pause-circle-fill")){
+         song.pause();
+         play.classList.remove("ri-pause-circle-fill")
+         play.classList.add("ri-play-circle-fill")
+  
+        }else{
+          song.play();
+         play.classList.add("ri-pause-circle-fill")
+         play.classList.remove("ri-play-circle-fill")
+        }
+    }
+    if(play.classList.contains("ri-play-circle-fill")){
+        setInterval(()=>{
+            progress.value=song.currentTime;
+        },500)
+    }
+  
+    progress.onchange=function(){
+        song.play();
+        song.currentTime=progress.value;
+        play.classList.add("ri-pause-circle-fill")
+        play.classList.remove("ri-play-circle-fill")
+    }
+    
+   
+
+
+    </script>
+  </body>
+</html>
